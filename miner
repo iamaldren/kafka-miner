@@ -13,7 +13,7 @@ class Producer(threading.Thread):
         self.stop_event.set()
 
     def run(self):
-        producer = KafkaProducer(bootstrap_servers='192.168.1.2:9092',
+        producer = KafkaProducer(bootstrap_servers='localhost:9092',
                                  value_serializer=lambda v: json.dumps(v).encode('utf-8'))
 
         x = '{"name": "aldren", "position": "developer"}'
@@ -35,7 +35,7 @@ class Consumer(multiprocessing.Process):
         self.stop_event.set()
 
     def run(self):
-        consumer = KafkaConsumer(bootstrap_servers='192.168.1.2:9092',
+        consumer = KafkaConsumer(bootstrap_servers='localhost:9092',
                                  auto_offset_reset='earliest',
                                  consumer_timeout_ms=1000,
                                  value_deserializer=lambda m: json.loads(m.decode('utf-8')))
