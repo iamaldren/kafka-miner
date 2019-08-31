@@ -20,7 +20,7 @@ class Producer(threading.Thread):
         y = json.loads(x)
 
         while not self.stop_event.is_set():
-            producer.send('test', y)
+            producer.send('testnew', y)
             time.sleep(1)
 
         producer.close()
@@ -39,7 +39,7 @@ class Consumer(multiprocessing.Process):
                                  auto_offset_reset='latest',
                                  consumer_timeout_ms=1000,
                                  value_deserializer=lambda m: json.loads(m.decode('utf-8')))
-        consumer.subscribe(['test'])
+        consumer.subscribe(['testnew'])
 
         while not self.stop_event.is_set():
             for message in consumer:
@@ -52,13 +52,14 @@ class Consumer(multiprocessing.Process):
 
 def main():
     tasks = [
+        Producer(),
         Consumer()
     ]
 
     for t in tasks:
         t.start()
 
-    time.sleep(10)
+    time.sleep(20)
 
     for task in tasks:
         task.stop()
